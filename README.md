@@ -28,6 +28,11 @@ The rest were filtered.
 
 ### Web Checks
 
+
+![Whatweb](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/whatweb.png)
+
+
+
 - `whatweb` confirmed Apache 2.4.18
     
 - Edited `/etc/hosts` to include:
@@ -47,6 +52,12 @@ I ran both `dirsearch` and `gobuster` to find hidden paths.
 gobuster dir -u http://shocker.htb -w /usr/share/wordlists/dirb/common.txt
 ```
 
+![Gobuster Scan](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/gobuster.png)
+
+![Dirsearch Scan](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Dirsearch.png)
+
+
+
 That revealed `/cgi-bin/`.
 
 Then I focused on that path with extensions:
@@ -55,6 +66,7 @@ Then I focused on that path with extensions:
 gobuster dir -u http://shocker.htb/cgi-bin/ -w /usr/share/wordlists/dirb/common.txt -x sh,pl,cgi
 ```
 
+![Gobuster Directory Brute Force](https://github.com/ibrahimAlbadrani/HTB_Shocker/blob/main/Gobuster%20Brute%20Force.png?raw=true]
 Found:
 
 ```
