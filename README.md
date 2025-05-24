@@ -5,7 +5,7 @@ This is my write-up for the Shocker machine on Hack The Box. I exploited a Shell
 
 ---
 
-## Recon
+
 
 ### Nmap
 I started with a full port scan:
