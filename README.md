@@ -14,6 +14,9 @@ I started with a full port scan:
 nmap -A -Pn -p- -T4 10.129.163.43
 ````
 
+![Nmap Scan](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Nmap1.png)
+
+
 **Open ports:**
 
 - `80/tcp` – Apache httpd 2.4.18
